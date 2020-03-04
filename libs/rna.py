@@ -24,7 +24,7 @@ class RNA:
 
     @staticmethod
     def validate(string):
-        valid = [c in RNA.nucleotides for c in string]
+        valid = (c in RNA.nucleotides for c in string)
         result = reduce(lambda x, y: x and y, valid)
         return result
 
@@ -33,10 +33,11 @@ class RNA:
         return {'A': 'U', 'U': 'A', 'C': 'G', 'G': 'C'}[ncl]
 
     def count(self):
-        return [char_count(self.string, n) for n in RNA.nucleotides]
+        return list(char_count(self.string, n) for n in RNA.nucleotides)
 
     def to_dna(self):
         return self.string.replace('U', 'T')
 
     def complement(self):
-        return [self.nucleic_inverse(n) for n in reversed(self.string)]
+        raw = (RNA.nucleic_inverse(n) for n in reversed(self.string))
+        return reduce(lambda x, y: x + y, raw)

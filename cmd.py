@@ -1,6 +1,7 @@
 from libs.dna import DNA
 from libs.rna import RNA
 from libs.gen import Genotypes
+from libs.popul import Population
 
 
 def count(_obj):
@@ -31,14 +32,22 @@ def cast2dna(_rna):
     return DNA(rna2dna(_rna))
 
 
-def complement(_obj):
-    return _obj.complement()
+def rev_comp(_obj):
+    return _obj.rev_complement()
 
 
-def gen_combine(_ls, _type):
+def gen_comb(_ls, _type):
     return [Genotypes.combine(*_ls, _type)]
 
 
-def gen_create(_ls):
-    dom, het, rec = [int(i) for i in _ls]
+def gen(_ls):
+    dom, het, rec = list(int(i) for i in _ls)
     return Genotypes.create(dom, het, rec)
+
+
+def popul(_ls):
+    return Population(*_ls)
+
+
+def evolve(_pop):
+    return [_pop.fib_evolution()]

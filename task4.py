@@ -1,4 +1,5 @@
-from libs.num import fib
-from libs.num import fib_ls
+from cmd import *
+from libs.utils import from_file
+from libs.utils import to_file
 
-print(fib_ls(100))
+to_file(evolve(popul(from_file("datasets/4", ' ', cast=int))), "outputs/4")

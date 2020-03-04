@@ -1,6 +1,6 @@
 from functools import reduce
 from enum import Enum
-from libs.prob import binom
+from libs.comb import binom
 
 
 class Allele(Enum):
@@ -26,9 +26,9 @@ class Genotypes:
 
     @staticmethod
     def create(dom, het, rec):
-        dominant = [Genotype((1, 1)) for _ in range(dom)]
-        hetero = [Genotype((1, 0)) for _ in range(het)]
-        recessive = [Genotype((0, 0)) for _ in range(rec)]
+        dominant = list(Genotype((1, 1)) for _ in range(dom))
+        hetero = list(Genotype((1, 0)) for _ in range(het))
+        recessive = list(Genotype((0, 0)) for _ in range(rec))
 
         return dominant, hetero, recessive
 
@@ -50,6 +50,6 @@ class Genotype:
 
     @staticmethod
     def validate(geno):
-        valid = [a in set(i.value for i in Allele) for a in geno]
+        valid = (a in set(i.value for i in Allele) for a in geno)
         result = reduce(lambda x, y: x and y, valid) and len(geno) == 2
         return result
