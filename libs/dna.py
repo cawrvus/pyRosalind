@@ -1,52 +1,25 @@
 from functools import reduce
-from libs.utils import char_count
+from libs.nucl import NucleicAcid
+from libs.const import DNA_NUCLEOTIDES
+from libs.const import DNA_COMPLEMENTS
 
 
-class DNA:
-    nucleotides = ['A', 'C', 'G', 'T']
-
+class DNA(NucleicAcid):
     def __init__(self, string, label=None):
-        self.string = string
-        self.label = label
+        super().__init__(DNA.validated(string), label)
 
-    def __str__(self):
-        return self.string
-
-    @property
-    def string(self):
-        return self._string
-
-    @string.setter
-    def string(self, string):
-        if DNA.validate(string):
-            self._string = string
-        else:
+    @staticmethod
+    def validated(string):
+        raw = (c in DNA_NUCLEOTIDES for c in string)
+        valid = reduce(lambda x, y: x and y, raw)
+        if not valid:
             raise ValueError("Invalid nucleotides provided")
-
-    @property
-    def label(self):
-        return self._label
-
-    @label.setter
-    def label(self, label):
-        self._label = label
+        return string
 
     @staticmethod
-    def validate(string):
-        valid = (c in DNA.nucleotides for c in string)
-        result = reduce(lambda x, y: x and y, valid)
-        return result
+    def inverse(ncl):
+        return DNA_COMPLEMENTS[ncl]
 
     @staticmethod
-    def nucleic_inverse(ncl):
-        return {'A': 'T', 'T': 'A', 'C': 'G', 'G': 'C'}[ncl]
-
-    def count(self):
-        return list(char_count(self.string, n) for n in DNA.nucleotides)
-
-    def to_rna(self):
-        return self.string.replace('T', 'U')
-
-    def rev_complement(self):
-        raw = (DNA.nucleic_inverse(n) for n in reversed(self.string))
-        return reduce(lambda x, y: x + y, raw)
+    def convert(string):
+        return string.replace('U', 'T')

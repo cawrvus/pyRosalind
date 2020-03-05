@@ -35,21 +35,16 @@ class Genotypes:
 
 class Genotype:
     def __init__(self, geno):
-        self.geno = geno
+        self._geno = Genotype.validated(geno)
 
     @property
     def geno(self):
         return self._geno
 
-    @geno.setter
-    def geno(self, val):
-        if Genotype.validate(val):
-            self._geno = val
-        else:
-            raise ValueError("Invalid genotypes provided")
-
     @staticmethod
-    def validate(geno):
-        valid = (a in set(i.value for i in Allele) for a in geno)
-        result = reduce(lambda x, y: x and y, valid) and len(geno) == 2
-        return result
+    def validated(geno):
+        raw = (a in set(i.value for i in Allele) for a in geno)
+        valid = reduce(lambda x, y: x and y, raw) and len(geno) == 2
+        if not valid:
+            raise ValueError("Invalid genotype provided")
+        return geno

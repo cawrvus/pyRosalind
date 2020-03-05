@@ -1,7 +1,3 @@
-def char_count(string, char):
-    return len(list(c for c in string if c == char))
-
-
 def from_file(file, delimiter=None, fasta=False, cast=(lambda x: x)):
     with open(file, "r") as fd:
         return list(map(cast, fd.read().strip().split(delimiter)))
